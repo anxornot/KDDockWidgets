@@ -1,7 +1,7 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
 #
 # Contact KDAB at <info@kdab.com> for commercial licensing options.
@@ -12,7 +12,7 @@ from conans import ConanFile, CMake, tools
 
 class KDDockWidgetsConan(ConanFile):
     name = "kddockwidgets"
-    version = "1.7.0"
+    version = "2.0.0"
     default_user = "kdab"
     default_channel = "stable"
     license = ("https://raw.githubusercontent.com/KDAB/KDDockWidgets/master/LICENSES/GPL-2.0-only.txt",

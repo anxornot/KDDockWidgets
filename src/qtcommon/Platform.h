@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -74,7 +74,7 @@ public:
 
 #ifdef DOCKS_DEVELOPER_MODE
 
-    /// Theses methods are implemented in TestHelpers_qt.cpp
+    /// These methods are implemented in TestHelpers_qt.cpp
 
     static bool isGammaray();
     explicit Platform_qt(QCoreApplication *);

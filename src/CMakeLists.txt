@@ -1,7 +1,6 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Sergio Martins <sergio.martins@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -486,15 +485,15 @@ endif()
 if(KDDW_FRONTEND_QTWIDGETS)
     target_link_libraries(
         kddockwidgets
-        PUBLIC Qt${Qt_VERSION_MAJOR}::Widgets
-        PRIVATE Qt${Qt_VERSION_MAJOR}::WidgetsPrivate
+        PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+        PRIVATE Qt${QT_VERSION_MAJOR}::WidgetsPrivate
     )
     target_compile_definitions(kddockwidgets PUBLIC KDDW_FRONTEND_QTWIDGETS KDDW_FRONTEND_QT)
 endif()
 
 if(KDDW_FRONTEND_QTQUICK)
-    target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::Quick Qt${Qt_VERSION_MAJOR}::QuickControls2)
-    target_link_libraries(kddockwidgets PRIVATE Qt${Qt_VERSION_MAJOR}::GuiPrivate Qt${Qt_VERSION_MAJOR}::QuickPrivate)
+    target_link_libraries(kddockwidgets PUBLIC Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickControls2)
+    target_link_libraries(kddockwidgets PRIVATE Qt${QT_VERSION_MAJOR}::GuiPrivate Qt${QT_VERSION_MAJOR}::QuickPrivate)
     target_compile_definitions(kddockwidgets PUBLIC KDDW_FRONTEND_QTQUICK KDDW_FRONTEND_QT)
 endif()
 
@@ -521,20 +520,20 @@ endif()
 
 if(KDDW_FRONTEND_QT)
     if(WIN32)
-        target_link_libraries(kddockwidgets PRIVATE Qt${Qt_VERSION_MAJOR}::GuiPrivate dwmapi)
+        target_link_libraries(kddockwidgets PRIVATE Qt${QT_VERSION_MAJOR}::GuiPrivate dwmapi)
     elseif(
         NOT APPLE
         AND NOT EMSCRIPTEN
         AND NOT KDDockWidgets_QT6
         AND KDDockWidgets_X11EXTRAS
     )
-        find_package(Qt${Qt_VERSION_MAJOR}X11Extras CONFIG)
-        target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::X11Extras)
+        find_package(Qt${QT_VERSION_MAJOR}X11Extras CONFIG)
+        target_link_libraries(kddockwidgets PUBLIC Qt${QT_VERSION_MAJOR}::X11Extras)
     endif()
 
     if(KDDockWidgets_DEVELOPER_MODE)
-        find_package(Qt${Qt_VERSION_MAJOR}Test ${QT_MIN_VERSION} REQUIRED)
-        target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::Test)
+        find_package(Qt${QT_VERSION_MAJOR}Test ${QT_MIN_VERSION} REQUIRED)
+        target_link_libraries(kddockwidgets PUBLIC Qt${QT_VERSION_MAJOR}::Test)
     endif()
 endif()
 
@@ -575,7 +574,7 @@ if(KDDW_FRONTEND_QT)
     if(MSVC AND NOT KDDockWidgets_STATIC)
         install(
             FILES "$<TARGET_PDB_FILE_DIR:kddockwidgets>/$<TARGET_PDB_FILE_NAME:kddockwidgets>"
-            DESTINATION ${INSTALL_LIBRARY_DIR}
+            DESTINATION ${INSTALL_RUNTIME_DIR}
             CONFIGURATIONS Debug RelWithDebInfo
         )
     endif()

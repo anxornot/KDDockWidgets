@@ -1,7 +1,6 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Sergio Martins <sergio.martins@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -35,7 +34,7 @@
 # install path for Python bindings Default=CMAKE_INSTALL_PREFIX
 #
 # -DKDDockWidgets_FRONTENDS='qtwidgets;qtquick' Semicolon separated list of
-# frontends to enable. If not specified, frontends will be enabled based on
+# frontends to enable. If not specified, Qt frontends will be enabled based on
 # availability of libraries on your system.
 
 # ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!! # Special
@@ -80,12 +79,17 @@ project(
 
 set(KDDockWidgets_VERSION_MAJOR 2)
 set(KDDockWidgets_VERSION_MINOR 0)
-set(KDDockWidgets_VERSION_PATCH 9)
+set(KDDockWidgets_VERSION_PATCH 1)
 set(KDDockWidgets_VERSION ${KDDockWidgets_VERSION_MAJOR}.${KDDockWidgets_VERSION_MINOR}.${KDDockWidgets_VERSION_PATCH})
 set(PROJECT_VERSION ${KDDockWidgets_VERSION}) # PROJECT_VERSION is needed by some ECM modules
 set(KDDockWidgets_SOVERSION "2.0")
 
 include(FeatureSummary)
+
+set(KDDockWidgets_FRONTENDS
+    ""
+    CACHE STRING "Semicolon separated list of frontends to enable (blank for autodetect)"
+)
 
 option(KDDockWidgets_QT6 "Build against Qt 6" OFF)
 option(KDDockWidgets_DEVELOPER_MODE "Developer Mode" OFF)
@@ -102,7 +106,6 @@ option(KDDockWidgets_X11EXTRAS
 )
 option(KDDockWidgets_XLib "On Linux, link against XLib, for a more robust window z-order detection." OFF)
 option(KDDockWidgets_CODE_COVERAGE "Enable coverage reporting" OFF)
-option(KDDockWidgets_FRONTENDS "Semicolon separated list of frontends to enable" "")
 option(KDDockWidgets_FLUTTER_NO_BINDINGS "Don't build flutter bindings, only the flutter frontend" OFF)
 option(KDDockWidgets_FLUTTER_TESTS_AOT "Flutter tests will be built in AOT mode" OFF)
 option(KDDockWidgets_NO_SPDLOG "Don't use spdlog, even if it is found." OFF)
@@ -138,10 +141,10 @@ if(MSVC AND MSVC_TOOLSET_VERSION LESS 142)
 endif()
 
 if(KDDockWidgets_QT6)
-    set(Qt_VERSION_MAJOR 6)
+    set(QT_VERSION_MAJOR 6)
     set(QT_MIN_VERSION "6.2.0")
 else()
-    set(Qt_VERSION_MAJOR 5)
+    set(QT_VERSION_MAJOR 5)
     set(QT_MIN_VERSION "5.15")
 endif()
 
@@ -163,12 +166,12 @@ endif()
 
 if(KDDockWidgets_FRONTENDS)
     if("qtwidgets" IN_LIST KDDockWidgets_FRONTENDS)
-        find_package(Qt${Qt_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS Widgets)
+        find_package(Qt${QT_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS Widgets)
         set(KDDW_FRONTEND_QTWIDGETS ON)
     endif()
 
     if("qtquick" IN_LIST KDDockWidgets_FRONTENDS)
-        find_package(Qt${Qt_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS Quick QuickControls2)
+        find_package(Qt${QT_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS Quick QuickControls2)
         set(KDDW_FRONTEND_QTQUICK ON)
     endif()
 
@@ -184,15 +187,15 @@ else()
     message("No frontends specified explicitly.")
 
     # qtwidgets
-    find_package(Qt${Qt_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE COMPONENTS Widgets Quick QuickControls2)
+    find_package(Qt${QT_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE COMPONENTS Widgets Quick QuickControls2)
 
-    if(Qt${Qt_VERSION_MAJOR}Widgets_FOUND)
+    if(Qt${QT_VERSION_MAJOR}Widgets_FOUND)
         list(APPEND ENABLED_FRONTENDS "qtwidgets")
         set(KDDW_FRONTEND_QTWIDGETS ON)
     endif()
 
     # qtquick
-    if(Qt${Qt_VERSION_MAJOR}Quick_FOUND AND Qt${Qt_VERSION_MAJOR}QuickControls2_FOUND)
+    if(Qt${QT_VERSION_MAJOR}Quick_FOUND AND Qt${QT_VERSION_MAJOR}QuickControls2_FOUND)
         list(APPEND ENABLED_FRONTENDS "qtquick")
         set(KDDW_FRONTEND_QTQUICK ON)
     endif()
@@ -209,6 +212,14 @@ else()
 endif()
 
 if(KDDW_FRONTEND_QTWIDGETS OR KDDW_FRONTEND_QTQUICK)
+    if(WIN32 AND (Qt6Core_VERSION VERSION_EQUAL "6.5.3" OR Qt6Core_VERSION VERSION_EQUAL "6.6.1"))
+        message(
+            FATAL_ERROR
+                "Qt 6.5.3 and 6.6.1 are not supported on Windows, as they suffer from a Qt regression: QTBUG-117704. "
+                "Please either downgrade or upgrade to 6.6.2 or superior"
+        )
+    endif()
+
     set(KDDW_FRONTEND_QT ON)
 endif()
 
@@ -438,7 +449,7 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
     # Generate .pri file for qmake users
     if(NOT CMAKE_CONFIGURATION_TYPES AND KDDW_FRONTEND_QT)
-        if(Qt_VERSION_MAJOR EQUAL 5 OR (Qt_VERSION_MAJOR EQUAL 6 AND Qt6Core_VERSION VERSION_GREATER "6.2"))
+        if(QT_VERSION_MAJOR EQUAL 5 OR (QT_VERSION_MAJOR EQUAL 6 AND Qt6Core_VERSION VERSION_GREATER "6.2"))
             include(ECMGeneratePriFile)
             set(PROJECT_VERSION_STRING ${KDDockWidgets_VERSION})
             ecm_generate_pri_file(
@@ -463,6 +474,9 @@ else()
     set(KDDockWidgets_EXAMPLES FALSE)
     set(KDDockWidgets_DOCS FALSE)
 endif()
+
+# workaround for CMAKE_CURRENT_FUNCTION_LIST_DIR below CMake 3.17
+set(KKDockWidgets_PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(KDDockWidgets_TESTS)
     enable_testing()
@@ -498,20 +512,6 @@ if(KDDockWidgets_EXAMPLES)
 
         # Standalone layouting example
         add_subdirectory(src/core/layouting/examples/qtwidgets/)
-
-        set_target_properties(
-            qtwidgets_dockwidgets PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples/"
-        )
-        set_target_properties(
-            qtwidgets_mdi_with_docking PROPERTIES RUNTIME_OUTPUT_DIRECTORY
-                                                  "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples/"
-        )
-        set_target_properties(
-            qtwidgets_mdi PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples/"
-        )
-        set_target_properties(
-            qtwidgets_minimal PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples/"
-        )
     endif()
 
     if(KDDW_FRONTEND_FLUTTER AND NOT KDDockWidgets_FLUTTER_NO_BINDINGS)
@@ -567,4 +567,13 @@ if(WIN32)
     )
 endif()
 
-feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+add_custom_target(
+    build-book
+    COMMAND mdbook build --dest-dir ${CMAKE_CURRENT_BINARY_DIR}/book
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Building KDDW book"
+)
+
+if(KDDockWidgets_IS_ROOT_PROJECT)
+    feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+endif()

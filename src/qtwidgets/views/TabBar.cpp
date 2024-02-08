@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -220,6 +220,11 @@ void TabBar::insertDockWidget(int index, Core::DockWidget *dw, const QIcon &icon
 void TabBar::setTabsAreMovable(bool are)
 {
     QTabBar::setMovable(are);
+}
+
+Core::TabBar *TabBar::tabBar() const
+{
+    return d->m_controller;
 }
 
 void TabBar::Private::onTabMoved(int from, int to)

@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sergio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -25,15 +25,15 @@ ApplicationWindow {
     }
 
     KDDW.DockWidget {
-        id: greenDock
-        uniqueName: "greenDock"
+        id: someDock
+        uniqueName: "someDock"
         Rectangle {
-            color: "green"
+            color: "#413C58"
             anchors.fill: parent
         }
     }
 
     Component.onCompleted: {
-        dockingArea.addDockWidget(greenDock, Qt.point(200, 200));
+        dockingArea.addDockWidget(someDock, Qt.point(200, 200));
     }
 }

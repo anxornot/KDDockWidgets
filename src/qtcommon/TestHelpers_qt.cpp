@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -260,7 +260,9 @@ void Platform_qt::tests_deinitPlatform_impl()
 }
 
 /*static*/
+QT_BEGIN_NAMESPACE
 extern quintptr Q_CORE_EXPORT qtHookData[];
+QT_END_NAMESPACE
 bool Platform_qt::isGammaray()
 {
     static bool is = qtHookData[3] != 0;

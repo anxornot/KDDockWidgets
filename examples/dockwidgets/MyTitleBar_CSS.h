@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -23,7 +23,7 @@
  * Derive from KDDockWidgets::QtWidgets::ViewFactory and override the createTitleBar() method.
  *
  * To try it out, modify examples/dockwidgets/MyViewFactory.cpp to return a MyTitleBar_CSS instance.
- * Run the example with: ./bin/examples/qtwidgets_dockwidgets -p
+ * Run the example with: ./bin/qtwidgets_dockwidgets -p
  *
  * WARNINGS:
  *   - Qt StyleSheets are not recommended for new applications. Often you are able to style 90% of

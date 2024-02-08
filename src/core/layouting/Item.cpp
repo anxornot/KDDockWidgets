@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -16,6 +16,7 @@
 #include "LayoutingSeparator_p.h"
 
 #include "core/Logging_p.h"
+#include "core/ObjectGuard_p.h"
 #include "core/ScopedValueRollback_p.h"
 #include "core/nlohmann_helpers_p.h"
 
@@ -4024,7 +4025,6 @@ int ItemContainer::count_recursive() const
 }
 
 LayoutingHost::~LayoutingHost() = default;
-LayoutingGuest::~LayoutingGuest() = default;
 LayoutingSeparator::~LayoutingSeparator() = default;
 
 LayoutingSeparator::LayoutingSeparator(LayoutingHost *host, Qt::Orientation orientation, Core::ItemBoxContainer *container)
@@ -4119,20 +4119,71 @@ int LayoutingSeparator::onMouseMove(Point pos, bool moveSeparator)
     return positionToGoTo;
 }
 
+class LayoutingGuest::Private
+{
+public:
+    ObjectGuard<Core::Item> layoutItem;
+};
+
+Core::Item *LayoutingGuest::layoutItem() const
+{
+    return d->layoutItem;
+}
+
 void LayoutingGuest::setLayoutItem(Item *item)
 {
-    if (layoutItem == item)
+    if (d->layoutItem == item)
         return;
 
-    if (layoutItem)
-        layoutItem->unref();
+    if (d->layoutItem)
+        d->layoutItem->unref();
 
     if (item)
         item->ref();
 
-    layoutItem = item;
+    d->layoutItem = item;
 
     setLayoutItem_impl(item);
+}
+
+LayoutingGuest::LayoutingGuest()
+    : d(new Private())
+{
+}
+
+LayoutingGuest::~LayoutingGuest()
+{
+    delete d;
+}
+
+/// Inserts a guest widget into the layout, to the specified location with some initial options
+/// the location is relative to the window, meaning Location_OnBottom will make the widget fill
+/// the entire bottom
+void LayoutingHost::insertItem(Core::LayoutingGuest *guest, Location loc,
+                               InitialOption initialOption)
+{
+    if (!guest || !guest->layoutItem()) {
+        // qWarning() << "insertItem: Something is null!";
+        return;
+    }
+
+    if (auto box = m_rootItem->asBoxContainer())
+        box->insertItem(guest->layoutItem(), loc, initialOption);
+}
+
+/// Inserts a guest widget into the layout but relative to another widget
+/// Similar to insertItem() but it's not relative to the window.
+/// See example in src/core/layouting/examples/qtwidgets/main.cpp
+void LayoutingHost::insertItemRelativeTo(Core::LayoutingGuest *guest, Core::LayoutingGuest *relativeTo, Location loc,
+                                         InitialOption initialOption)
+{
+    if (!guest || !relativeTo || !guest->layoutItem() || !relativeTo->layoutItem()) {
+        // qWarning() << "insertItemRelativeTo: Something is null!";
+        return;
+    }
+
+    if (auto box = m_rootItem->asBoxContainer())
+        box->insertItemRelativeTo(guest->layoutItem(), relativeTo->layoutItem(), loc, initialOption);
 }
 
 #ifdef Q_CC_MSVC

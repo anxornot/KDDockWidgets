@@ -1,7 +1,6 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Allen Winter <allen.winter@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -51,7 +50,6 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../screencap.gif
             ${DOXYGEN_OUTPUT_DIR}/html
     # copy some files by-hand that are referred to by the markdown README
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/README-bindings.md ${DOXYGEN_OUTPUT_DIR}/html
     COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}/html/LICENSES
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/LICENSES/GPL-2.0-only.txt
             ${DOXYGEN_OUTPUT_DIR}/html/LICENSES

@@ -1,4 +1,3 @@
-#
 # This file is part of KDDockWidgets.
 #
 # SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
@@ -7,8 +6,9 @@
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
 #
 # Contact KDAB at <info@kdab.com> for commercial licensing options.
+#
 
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.15)
 
 project(
     qtwidgets_layouting_example
@@ -42,7 +42,3 @@ if(NOT TARGET nlohmann_json::nlohmann_json)
     include(../../../../nlohmann.cmake)
     link_to_nlohman(qtwidgets_standalone_layouting)
 endif()
-
-set_target_properties(
-    qtwidgets_standalone_layouting PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples/"
-)

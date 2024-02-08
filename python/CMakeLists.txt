@@ -1,7 +1,7 @@
 #
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Renato Araujo Oliveira Filho <renato.araujo@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -46,7 +46,7 @@ else()
 endif()
 set(${PROJECT_NAME}_PYTHON_BINDINGS_INSTALL_PREFIX "${${PROJECT_NAME}_PYTHON_BINDINGS_INSTALL_PREFIX}/${BINDINGS_DIR}")
 
-include(PySide${PYSIDE_MAJOR_VERSION}ModuleBuild)
+include(KDPySide${PYSIDE_MAJOR_VERSION}ModuleBuild)
 add_subdirectory(PyKDDockWidgets)
 if(${PROJECT_NAME}_TESTS)
     add_subdirectory(tests)

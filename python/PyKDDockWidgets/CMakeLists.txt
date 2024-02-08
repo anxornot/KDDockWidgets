@@ -1,7 +1,6 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Renato Araujo Oliveira Filho <renato.araujo@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -46,8 +45,8 @@ set(PyKDDockWidgets_target_include_directories ${CMAKE_SOURCE_DIR}/src)
 
 # Libraries that will be necessary to link the target, this will used in the
 # command 'target_link_libraries'
-set(PyKDDockWidgets_target_link_libraries KDAB::kddockwidgets Qt${Qt_VERSION_MAJOR}::Core Qt${Qt_VERSION_MAJOR}::Gui
-                                          Qt${Qt_VERSION_MAJOR}::Widgets ${Python3_LIBRARIES}
+set(PyKDDockWidgets_target_link_libraries KDAB::kddockwidgets Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui
+                                          Qt${QT_VERSION_MAJOR}::Widgets ${Python3_LIBRARIES}
 )
 
 # changes on these files should trigger a new generation

@@ -1,7 +1,6 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
 # Author: Sergio Martins <sergio.martins@kdab.com>
 #
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -14,7 +13,7 @@ if(POLICY CMP0043)
 endif()
 
 if(KDDW_FRONTEND_QT)
-    find_package(Qt${Qt_VERSION_MAJOR}Test ${QT_MIN_VERSION} REQUIRED)
+    find_package(Qt${QT_VERSION_MAJOR}Test ${QT_MIN_VERSION} REQUIRED)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
@@ -54,7 +53,7 @@ endfunction()
 # tst_qtwidgets
 if(KDDW_FRONTEND_QTWIDGETS)
     add_executable(tst_qtwidgets qtwidgets/tst_qtwidgets.cpp ${TESTING_SRCS} ${TESTING_RESOURCES})
-    target_link_libraries(tst_qtwidgets kdbindings kddockwidgets Qt${Qt_VERSION_MAJOR}::Test)
+    target_link_libraries(tst_qtwidgets kdbindings kddockwidgets Qt${QT_VERSION_MAJOR}::Test)
     if(KDDockWidgets_HAS_SPDLOG)
         target_link_libraries(tst_qtwidgets spdlog::spdlog)
     endif()
@@ -66,7 +65,7 @@ endif()
 # tst_qtquick
 if(KDDW_FRONTEND_QTQUICK)
     add_executable(tst_qtquick qtquick/tst_qtquick.cpp ${TESTING_SRCS} ${TESTING_RESOURCES})
-    target_link_libraries(tst_qtquick kddockwidgets kdbindings Qt${Qt_VERSION_MAJOR}::Test)
+    target_link_libraries(tst_qtquick kddockwidgets kdbindings Qt${QT_VERSION_MAJOR}::Test)
     if(KDDockWidgets_HAS_SPDLOG)
         target_link_libraries(tst_qtquick spdlog::spdlog)
     endif()

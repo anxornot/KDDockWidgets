@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2020-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -293,7 +293,8 @@ void Group::removeWidget(DockWidget *dw)
     if (it != d->iconChangedConnections.end())
         d->iconChangedConnections.erase(it);
 
-    dynamic_cast<Core::GroupViewInterface *>(view())->removeDockWidget(dw);
+    if (auto gvi = dynamic_cast<Core::GroupViewInterface *>(view()))
+        gvi->removeDockWidget(dw);
 }
 
 FloatingWindow *Group::detachTab(DockWidget *dockWidget)
@@ -844,7 +845,10 @@ Rect Group::dragRect() const
     if (rect.isValid())
         return rect;
 
-    return dynamic_cast<Core::GroupViewInterface *>(view())->dragRect();
+    if (auto gvi = dynamic_cast<Core::GroupViewInterface *>(view()))
+        return gvi->dragRect();
+
+    return {};
 }
 
 MainWindow *Group::mainWindow() const

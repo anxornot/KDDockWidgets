@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -144,6 +144,9 @@ void DockWidget::addDockWidgetToContainingWindow(DockWidget *other, Location loc
                                                  DockWidget *relativeTo,
                                                  InitialOption initialOption)
 {
+    if (!other)
+        return;
+
     if (auto mainWindow = view()->rootView()->asMainWindowController()) {
         // It's inside a main window. Simply use the main window API.
         mainWindow->addDockWidget(other, location, relativeTo, initialOption);
